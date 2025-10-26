@@ -3,11 +3,9 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { routes } from './app.routes';
 
-// Ports
 import { AuthPort } from './core/api/domain/ports/auth.port';
 import { SpotifyRepositoryPort } from './core/api/domain/ports/spotify-repository.port';
 
-// Infrastructure
 import { SpotifyAuthService } from './core/api/infrastructure/services/spotify-auth.service';
 import { SpotifyHttpService } from './core/api/infrastructure/services/spotify-http.service';
 import { AuthInterceptor } from './core/api/infrastructure/interceptors/auth.interceptor';

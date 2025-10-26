@@ -1,0 +1,79 @@
+<div class="search-bar">
+  <div class="input-wrapper">
+    <mat-icon class="icon-search">search</mat-icon>
+    
+    <input
+      type="text"
+      [(ngModel)]="query"
+      (input)="onInput(query)"
+      (blur)="showResults = false"
+      (focus)="showResults = results !== null"
+      placeholder="Search songs, artists, albums..."
+      class="input"
+    />
+
+    <mat-icon *ngIf="loading" class="icon-loading">refresh</mat-icon>
+    
+    <button 
+      *ngIf="query && !loading" 
+      (click)="clear()" 
+      class="btn-clear"
+      type="button">
+      <mat-icon>close</mat-icon>
+    </button>
+    <div *ngIf="showResults && results" class="results">
+      <div *ngIf="results.tracks.items.length" class="section">
+        <div class="section-title">TRACKS</div>
+        <button
+          *ngFor="let item of results.tracks.items"
+          (click)="select('track', item.id, item.name)"
+          class="item"
+          type="button">
+          <img [src]="item.album.images[0]?.url" [alt]="item.name" class="img">
+          <div class="info">
+            <div class="name">{{ item.name }}</div>
+            <div class="sub">{{ item.artists[0].name }}</div>
+          </div>
+          <mat-icon class="icon-play">play_circle_outline</mat-icon>
+        </button>
+      </div>
+
+      <div *ngIf="results.artists.items.length" class="section">
+        <div class="section-title">ARTISTS</div>
+        <button
+          *ngFor="let item of results.artists.items"
+          (click)="select('artist', item.id, item.name)"
+          class="item"
+          type="button">
+          <img [src]="item.images?.[0]?.url" [alt]="item.name" class="img round">
+          <div class="info">
+            <div class="name">{{ item.name }}</div>
+            <div *ngIf="results.tracks.items.length > 0" class="section"></div>
+          </div>
+          <mat-icon class="icon-arrow">chevron_right</mat-icon>
+        </button>
+      </div>
+
+      <div *ngIf="results.albums.items.length" class="section">
+        <div class="section-title">ALBUMS</div>
+        <button
+          *ngFor="let item of results.albums.items"
+          (click)="select('album', item.id, item.name)"
+          class="item"
+          type="button">
+          <img [src]="item.images[0]?.url" [alt]="item.name" class="img">
+          <div class="info">
+            <div class="name">{{ item.name }}</div>
+            <div class="sub">{{ item.artists[0].name }}</div>
+          </div>
+          <mat-icon class="icon-arrow">chevron_right</mat-icon>
+        </button>
+      </div>
+
+      <div *ngIf="!results.tracks.items.length && !results.artists.items.length && !results.albums.items.length" class="empty">
+        <mat-icon class="icon-empty">search_off</mat-icon>
+        <p>No results found</p>
+      </div>
+    </div>
+  </div>
+</div>
