@@ -1,0 +1,21 @@
+<div class="track-row">
+  <div class="index">{{ index + 1 }}</div>
+  
+  <img 
+    [src]="image || 'https://via.placeholder.com/40'" 
+    [alt]="title" 
+    class="image">
+  
+  <div class="info">
+    <div class="title">{{ title }}</div>
+    <div class="artist">{{ artist }}</div>
+  </div>
+  
+  <div class="album">{{ album }}</div>
+  
+  <div class="duration">{{ formattedDuration }}</div>
+  
+  <button class="play-btn" (click)="onPlay()" type="button">
+    <mat-icon>play_circle_filled</mat-icon>
+  </button>
+</div>

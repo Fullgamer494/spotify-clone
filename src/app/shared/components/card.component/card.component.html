@@ -1,0 +1,13 @@
+<div class="card" (click)="onCardClick()">
+  <div class="image-wrapper">
+    <img 
+      [src]="image || 'https://via.placeholder.com/200'" 
+      [alt]="title"
+      [class.rounded]="rounded"
+      class="image">
+  </div>
+  <div class="content">
+    <h3 class="title">{{ title }}</h3>
+    <p class="subtitle">{{ subtitle }}</p>
+  </div>
+</div>
