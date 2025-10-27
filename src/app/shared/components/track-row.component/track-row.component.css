@@ -8,7 +8,7 @@
   transition: background 0.2s;
 
   &:hover {
-    background: #121212;
+    background-color: #121212;
 
     .play-btn {
       opacity: 1;
