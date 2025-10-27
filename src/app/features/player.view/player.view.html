@@ -1,0 +1,120 @@
+<div class="player-page" *ngIf="currentTrack">
+  <button class="back-btn" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+    <span>Back to Search</span>
+  </button>
+
+  <div class="player-container">
+    <div class="main-content">
+      <div class="album-art">
+        <img [src]="getAlbumImage()" [alt]="currentTrack.name" class="album-image">
+      </div>
+
+      <div class="track-info">
+        <h1 class="track-title">{{ currentTrack.name }}</h1>
+        <h2 class="track-artist">{{ getArtistNames() }}</h2>
+        <p class="track-album">{{ currentTrack.album.name }}</p>
+      </div>
+
+      <div class="player-controls">
+        <div class="progress-section">
+          <span class="time-label">{{ formatTime(currentTime) }}</span>
+          <div class="progress-bar-container">
+            <input 
+              type="range" 
+              min="0" 
+              [max]="duration" 
+              [value]="currentTime"
+              (input)="seek($event)"
+              class="progress-bar">
+            <div class="progress-fill" [style.width.%]="progressPercentage"></div>
+          </div>
+          <span class="time-label">{{ formatTime(duration) }}</span>
+        </div>
+
+        <div class="controls">
+          <button class="control-btn" (click)="playPrevious()">
+            <mat-icon>skip_previous</mat-icon>
+          </button>
+          
+          <button class="control-btn play-btn" (click)="togglePlay()">
+            <mat-icon>{{ isPlaying ? 'pause_circle_filled' : 'play_circle_filled' }}</mat-icon>
+          </button>
+          
+          <button class="control-btn" (click)="playNext()">
+            <mat-icon>skip_next</mat-icon>
+          </button>
+        </div>
+
+        <div class="volume-control">
+          <button class="control-btn small" (click)="showVolumeSlider = !showVolumeSlider">
+            <mat-icon>{{ volume === 0 ? 'volume_off' : volume < 50 ? 'volume_down' : 'volume_up' }}</mat-icon>
+          </button>
+          <div class="volume-slider" *ngIf="showVolumeSlider">
+            <input 
+              type="range" 
+              min="0" 
+              max="100" 
+              [value]="volume"
+              (input)="setVolume($event)"
+              class="slider">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="queue-section">
+      <div class="queue-header">
+        <h3>
+          <mat-icon>queue_music</mat-icon>
+          Queue
+        </h3>
+        <span class="queue-count">{{ queue.length }} tracks</span>
+      </div>
+
+      <div class="queue-list" *ngIf="queue.length > 0">
+        <div 
+          class="queue-item" 
+          *ngFor="let track of queue; let i = index"
+          (click)="playFromQueue(track, i)">
+          <img 
+            [src]="track.album?.images?.[0]?.url || 'https://via.placeholder.com/50'" 
+            [alt]="track.name"
+            class="queue-item-image">
+          
+          <div class="queue-item-info">
+            <div class="queue-item-title">{{ track.name }}</div>
+            <div class="queue-item-artist">
+              {{ track.artists?.[0]?.name || 'Unknown Artist' }}
+            </div>
+          </div>
+          
+          <div class="queue-item-duration">
+            {{ formatTime(track.duration_ms / 1000) }}
+          </div>
+          
+          <button 
+            class="queue-item-remove" 
+            (click)="removeFromQueue(i); $event.stopPropagation()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="queue-empty" *ngIf="queue.length === 0">
+        <mat-icon>queue_music</mat-icon>
+        <p>Queue is empty</p>
+        <p class="queue-empty-hint">Add tracks from search results</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="no-track" *ngIf="!currentTrack">
+  <mat-icon>music_off</mat-icon>
+  <h2>No track selected</h2>
+  <button class="back-btn" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+    Go to Search
+  </button>
+</div>
