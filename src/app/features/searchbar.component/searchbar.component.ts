@@ -1,12 +1,11 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, Output, EventEmitter, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { ApiService } from '../../core/api/api.service';
-import { Track } from '../../core/models/track.model';
 import { SearchResult } from '../../core/models/search.model';
+import { ApiService } from '../../core/api/api.service';
 
 @Component({
   selector: 'app-search-bar',
@@ -16,11 +15,14 @@ import { SearchResult } from '../../core/models/search.model';
   styleUrl: './searchbar.component.css'
 })
 export class SearchBarComponent implements OnDestroy {
+  @Output() searchEmit = new EventEmitter<string>();
+  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+  
   query = '';
   results: SearchResult | null = null;
   loading = false;
   showResults = false;
-  
+ 
   private search$ = new Subject<string>();
 
   constructor(private api: ApiService) {
@@ -33,7 +35,7 @@ export class SearchBarComponent implements OnDestroy {
           this.showResults = false;
           return [];
         }
-        
+       
         console.log('Searching:', q);
         this.loading = true;
         return this.api.searchMusic(q, 5);
@@ -44,14 +46,10 @@ export class SearchBarComponent implements OnDestroy {
         this.loading = false;
         this.showResults = true;
         
-        console.log('Results:', data);
-        console.log('Tracks:', data.tracks.items);
-        console.log('Artists:', data.artists.items);
-        console.log('Albums:', data.albums.items);
+        this.searchEmit.emit(this.query);       
       },
       error: (err) => {
         this.loading = false;
-        console.error('❌ Error:', err);
       }
     });
   }
@@ -61,15 +59,58 @@ export class SearchBarComponent implements OnDestroy {
     this.search$.next(value);
   }
 
+  onSubmit(): void {
+    if (this.query.trim()) {
+      this.showResults = false;
+      
+      this.blurInput();
+      
+      this.searchEmit.emit(this.query.trim());
+    }
+  }
+
   clear(): void {
     this.query = '';
     this.results = null;
     this.showResults = false;
+    
+    setTimeout(() => {
+      this.focusInput();
+    }, 0);
   }
 
   select(type: string, id: string, name: string): void {
-    console.log(`Selected ${type}:`, { id, name });
+    
+    this.query = name;
     this.showResults = false;
+    
+    this.blurInput();
+    
+    this.searchEmit.emit(name);
+  }
+
+  onBlur(): void {
+    setTimeout(() => {
+      this.showResults = false;
+    }, 200);
+  }
+
+  onFocus(): void {
+    if (this.results && this.query.trim()) {
+      this.showResults = true;
+    }
+  }
+
+  private blurInput(): void {
+    if (this.searchInput?.nativeElement) {
+      this.searchInput.nativeElement.blur();
+    }
+  }
+
+  private focusInput(): void {
+    if (this.searchInput?.nativeElement) {
+      this.searchInput.nativeElement.focus();
+    }
   }
 
   ngOnDestroy(): void {

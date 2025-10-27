@@ -21,24 +21,25 @@
   width: 100%;
   padding: 1rem 3rem;
   font-size: 1rem;
-  border: 2px solid #ddd;
   border-radius: 50px;
   outline: none;
   transition: border 0.2s;
+  background-color: #212121;
+  color: #FFFFFF;
 
   &:focus {
     border-color: #1db954;
   }
 
   &::placeholder {
-    color: #999;
+    color: #FFFFFF;
   }
 }
 
 .icon-search {
   position: absolute;
   left: 1rem;
-  color: #666;
+  color: #FFFFFF;
   pointer-events: none;
 }
 
@@ -63,17 +64,18 @@
   border-radius: 50%;
   display: flex;
   align-items: center;
-  color: #666;
+  color: #FFFFFF;
   transition: background 0.2s;
 
   &:hover {
-    background: #f0f0f0;
+    background: #121212;
   }
 
   mat-icon {
     font-size: 20px;
     width: 20px;
     height: 20px;
+    color: #FFFFFF;
   }
 }
 
@@ -82,7 +84,8 @@
   top: calc(100% + 3px);
   left: 0;
   right: 0;
-  background: #fff;
+  background-color: #212121;
+  color: #FFFFFF;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
   max-height: 500px;
@@ -102,7 +105,7 @@
 .section-title {
   font-size: 0.75rem;
   font-weight: 700;
-  color: #999;
+  color: #FFFFFF;
   padding: 8px 12px;
   letter-spacing: 0.5px;
 }
@@ -122,7 +125,7 @@
   position: relative;
 
   &:hover {
-    background: #f5f5f5;
+    background-color: #121212;
 
     .icon-play,
     .icon-arrow {
@@ -150,7 +153,7 @@
 
 .name {
   font-weight: 600;
-  color: #191414;
+  color: #FFFFFF;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -159,7 +162,7 @@
 
 .sub {
   font-size: 0.875rem;
-  color: #666;
+  color: #FFFFFF;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -175,7 +178,7 @@
 .empty {
   padding: 2rem;
   text-align: center;
-  color: #999;
+  color: #FFFFFF;
 
   .icon-empty {
     font-size: 48px;
