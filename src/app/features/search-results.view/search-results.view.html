@@ -1,0 +1,60 @@
+<div class="page">
+  <app-search-bar (searchEmit)="onSearch($event)"></app-search-bar>
+
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Searching...</p>
+  </div>
+
+  <div *ngIf="results && !loading" class="results">
+    <section *ngIf="results.tracks.items.length > 0" class="section">
+      <h2>Tracks</h2>
+      <div class="tracks-list">
+        <app-track-row
+          *ngFor="let track of results.tracks.items; let i = index"
+          [index]="i"
+          [image]="track.album.images && track.album.images.length > 0 ? track.album.images[0].url : ''"
+          [title]="track.name"
+          [artist]="track.artists && track.artists.length > 0 ? track.artists[0].name : ''"
+          [album]="track.album.name"
+          [duration]="track.duration_ms"
+          (play)="playTrack(track)">
+        </app-track-row>
+      </div>
+    </section>
+
+    <section *ngIf="results.artists.items.length > 0" class="section">
+      <h2>Artists</h2>
+      <div class="grid">
+        <app-card
+          *ngFor="let artist of results.artists.items"
+          [image]="getArtistImage(artist)"
+          [title]="artist.name"
+          [subtitle]="getArtistGenre(artist)"
+          [rounded]="true"
+          (clicked)="viewArtist(artist)">
+        </app-card>
+      </div>
+    </section>
+
+    <section *ngIf="results.albums.items.length > 0" class="section">
+      <h2>Albums</h2>
+      <div class="grid">
+        <app-card
+          *ngFor="let album of results.albums.items"
+          [image]="getAlbumImage(album)"
+          [title]="album.name"
+          [subtitle]="getAlbumArtist(album)"
+          (clicked)="viewAlbum(album)">
+        </app-card>
+      </div>
+    </section>
+
+    <div *ngIf="results.tracks.items.length === 0 && 
+                results.artists.items.length === 0 && 
+                results.albums.items.length === 0"
+         class="no-results">
+      <p>No results found. Try a different search.</p>
+    </div>
+  </div>
+</div>
